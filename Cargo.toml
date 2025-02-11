@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "ollama_rs_tool_macro",
+    "terminal_executor"
+]
+
+resolver = "2"  # Recommended for Rust 2021 and later

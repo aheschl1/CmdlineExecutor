@@ -1,0 +1,156 @@
+[
+    {
+        "name": "classegTrain",
+        "description": "Train a model using classeg pipeline. if you do not want use an option, set it to the empty string",
+        "params": [
+            {
+                "name": "d",
+                "description": "dataset id",
+                "required": true,
+                "flag": false,
+                "positional": false
+            },
+            {
+                "name": "f",
+                "description": "fold to use",
+                "required": true,
+                "flag": false,
+                "positional": false
+            },
+            {
+                "name": "n",
+                "description": "name of the experiment",
+                "required": false,
+                "flag": false,
+                "positional": false
+            },
+            {
+                "name": "c",
+                "description": "configuration file name",
+                "required": false,
+                "flag": false,
+                "positional": false
+            },
+            {
+                "name": "ext",
+                "description": "extension to use for training",
+                "required": false,
+                "flag": false,
+                "positional": false
+            },
+            {
+                "name": "fo",
+                "description": "to force an override of the output folder",
+                "required": false,
+                "flag": true,
+                "positional": false
+            },
+            {
+                "name": "r",
+                "description": "to resume training",
+                "required": false,
+                "flag": true,
+                "positional": false
+            }
+        ]
+    },
+    {
+        "name": "ls",
+        "description": "List contents of a folder",
+        "params": [
+            {
+                "name": "folder",
+                "description": "path to folder to list",
+                "required": true,
+                "flag": false,
+                "positional": true
+            },
+            {
+                "name": "l",
+                "description": "list in long format",
+                "required": false,
+                "flag": true,
+                "positional": false
+            }
+        ]
+    },
+    {
+        "name": "cat",
+        "description": "Display the contents of a file.",
+        "params": [
+            {
+                "name": "file",
+                "description": "Path to the file",
+                "required": true,
+                "flag": false,
+                "positional": true
+            }
+        ]
+    },
+    {
+        "name": "df",
+        "description": "Display disk space usage for file systems.",
+        "params": [
+            {
+                "name": "h",
+                "description": "Display sizes in human-readable format",
+                "required": false,
+                "flag": true,
+                "positional": false
+            }
+        ]
+    },
+    {
+        "name": "du",
+        "description": "Display disk usage of files and directories.",
+        "params": [
+            {
+                "name": "path",
+                "description": "Path to directory or file",
+                "required": false,
+                "flag": false,
+                "positional": true
+            },
+            {
+                "name": "h",
+                "description": "Display sizes in human-readable format",
+                "required": false,
+                "flag": true,
+                "positional": false
+            },
+            {
+                "name": "s",
+                "description": "Summarize total size",
+                "required": false,
+                "flag": true,
+                "positional": false
+            }
+        ]
+    },
+    {
+        "name": "ps",
+        "description": "Display information about active processes.",
+        "params": [
+            {
+                "name": "a",
+                "description": "Show all processes with detailed info",
+                "required": false,
+                "flag": true,
+                "positional": false
+            }
+        ]
+    },
+    {
+        "name": "free",
+        "description": "Display memory usage statistics.",
+        "params": [
+            {
+                "name": "h",
+                "description": "Display values in human-readable format",
+                "required": false,
+                "flag": true,
+                "positional": false
+            }
+        ]
+    }   
+]
