@@ -19,7 +19,7 @@ generate_ollamars_cmdline_tool_functions!("/home/andrew/Documents/CmdlineLLMWork
 fn get_model_name() -> String{
     match env::var("CMDLINE_LLM_MODEL") {
         Ok(val) => val,
-        Err(_) => "llama3.2:3b-instruct-q3_K_M".to_string(),
+        Err(_) => "cmdline_executor_llama3b:latest".to_string(),
     }
 }
 
@@ -28,10 +28,11 @@ async fn main() -> Result<(), ollama_rs::error::OllamaError> {
     let model = get_model_name();
     let ollama = Ollama::default();
 
+
     let tools = get_functions();
     let history: Vec<ChatMessage> = vec![];
     let mut coordinator = Coordinator::new_with_tools(ollama, model, history, tools)
-        .options(GenerationOptions::default().num_ctx(64000));
+        .options(GenerationOptions::default().num_ctx(64000)).debug(true);
 
     
     // start with the default skin

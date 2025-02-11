@@ -17,7 +17,8 @@ struct CmdlineParam{
     description: String,
     required: bool,
     positional: bool,
-    flag: bool
+    flag: bool,
+    prefix: String
 }
 
 #[proc_macro]
@@ -63,6 +64,11 @@ pub fn generate_ollamars_cmdline_tool_functions(input: TokenStream) -> TokenStre
                 "normal"
             }
         }).collect::<Vec<&str>>();
+
+        let func_arg_prefixes = cmd.params.iter().map(|param| {
+            param.prefix.as_str()
+        }).collect::<Vec<&str>>();
+
         let func_name_str = cmd.name.clone();
 
         let func_args_vec: Vec<_> = cmd.params.iter().map(|param| {
@@ -83,20 +89,22 @@ pub fn generate_ollamars_cmdline_tool_functions(input: TokenStream) -> TokenStre
             let session_name = #func_name_str;
             let args_names: Vec<&str> = vec![#(#arg_name_strs),*]; // Expand args into a Vec
             let arg_types: Vec<&str> = vec![#(#func_arg_types),*]; // Expand arg_types into a Vec
+            let arg_prefixes: Vec<&str> = vec![#(#func_arg_prefixes),*];
             let mut command_to_run: String = format!("{} ", &session_name);
 
             for (i, a) in #func_args_vec.iter().enumerate(){
                 let arg_name = args_names[i];
                 let arg_type = arg_types[i];
+                let arg_prefix = arg_prefixes[i];
                 if a.len() == 0 {continue;}
                 else{
                     if arg_type == "flag"{
-                        command_to_run.push_str(&format!("--{} ", arg_name));
+                        command_to_run.push_str(&format!("{}{} ", arg_prefix, arg_name));
                     }else if arg_type == "positional"{
                         command_to_run.push_str(&format!("{} ", a));
                     }else{
                         // -name val
-                        command_to_run.push_str(&format!("-{} {} ", arg_name, a)); 
+                        command_to_run.push_str(&format!("{}{} {} ", arg_prefix, arg_name, a)); 
                     }
                 }
             };
@@ -136,7 +144,7 @@ pub fn generate_ollamars_cmdline_tool_functions(input: TokenStream) -> TokenStre
         
                             for line in reader.lines() {
                                 if let Err(_) = line {
-                                    output.push_str("<system>Command success, but failed to read line from stdout. Continue</system>\n");
+                                    output.push_str("<system>laucnh success, but failed to read line from stdout. </system>\n");
                                 } else {
                                     let line = line.unwrap();
                                     output.push_str(&line);
@@ -145,7 +153,7 @@ pub fn generate_ollamars_cmdline_tool_functions(input: TokenStream) -> TokenStre
         
                                 if start_time.elapsed() > timeout {
                                     did_timeout = true;
-                                    output.push_str("<system>Command success, but timed out stdout/stderr. Continue</system>\n");
+                                    output.push_str("<system>launch success, but timed out stdout/stderr. </system>\n");
                                     break;
                                 }
                             }
@@ -156,13 +164,15 @@ pub fn generate_ollamars_cmdline_tool_functions(input: TokenStream) -> TokenStre
                                     .arg("-t")
                                     .arg(session_name)
                                     .status();
+                            } else{
+                                output.push_str("<system> command is still running. </system>\n");
                             }
-                            return Ok(format!("<system>{} ran with output:\n{} </system>", command_to_run, output));
+                            return Ok(format!("<system>command: {} output: {} </system>", command_to_run, output));
                         }
-                        Err(e) => return Ok(format!("<system>Success but failed to capture stdout.</system>")),
+                        Err(e) => return Ok(format!("<system>command launched, but failed to capture stdout.</system>")),
                     }
                 }
-                Err(e) => return Ok(format!("<system>Failed to launch tmux session: {:?}</system>", e)),
+                Err(e) => return Ok(format!("<system>failed to launch tmux session: {:?}</system>", e)),
             }
 
         };
