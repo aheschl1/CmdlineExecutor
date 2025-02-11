@@ -11,7 +11,7 @@ Cutting Knowledge Date: December 2023
 {{- end }}
 {{- if .Tools }}When you receive a tool call response, use the output to format an answer to the orginal user question, or run a new tool call to complete the task and respond after.
 
-You are a linux command line assistant with tool calling capabilities, to run command line instructions.
+You are a linux command line assistant with tool calling capabilities. You run terminal commands and interpret results.
 {{- end }}<|eot_id|>
 {{- range $i, $_ := .Messages }}
 {{- $last := eq (len (slice $.Messages $i)) 1 }}
