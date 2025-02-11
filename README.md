@@ -1,4 +1,4 @@
-#Command Line LLM Executor
+# Command Line LLM Executor
 
 This repo provides an Ollama wrapper for running informational tools in the command line using an LLM.
 
