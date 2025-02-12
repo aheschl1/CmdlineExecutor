@@ -1,23 +1,26 @@
-use std::env;
 use clap::command;
-use ollama_rs::generation::tools::Tool;
 use ollama_rs::generation::tools::ToolGroup;
 use ollama_rs::history::ChatHistory;
 use ollama_rs_tool_macro::generate_ollamars_cmdline_tool_functions;
 use ollama_rs::coordinator::Coordinator;
 use ollama_rs::generation::chat::ChatMessage;
 use ollama_rs::generation::options::GenerationOptions;
+use serde::Serialize;
 use termimad::gray;
 use termimad::MadSkin;
 use tokio;
 use ollama_rs::{tool_group, Ollama};
+use whoami::fallible;
 use std::process::Command;
 use std::time::Instant;
 use std::time::Duration;
 use std::process::Stdio;
 use std::io::BufReader;
 use std::io::BufRead;
-use clap::{Parser};
+use clap::Parser;
+use sysinfo::System;
+use uname::uname;
+use whoami;
 
 const DEFAULT_MODEL: &str = "cmdline_executor_llama3b:latest";
 // building the tool calls
@@ -35,6 +38,46 @@ struct Args {
     /// Model selection (optional)
     #[arg(short = 'm', long = "model", default_value = DEFAULT_MODEL)]
     model: String,
+}
+
+#[derive(Serialize)]
+struct SystemInfo {
+    os: String,
+    kernel: String,
+    uptime: String,
+    hostname: String,
+    cpu: String,
+    memory: String,
+    user: String,
+}
+
+impl SystemInfo {
+    pub fn new() -> Self {
+        let sys = System::new_all();
+        let uname_info = uname().unwrap();
+        
+        let os = System::long_os_version().unwrap_or_else(|| "Unknown OS".to_string());
+        let kernel = uname_info.release;
+        let uptime = format!("{} seconds", sysinfo::System::uptime());
+        let hostname = fallible::hostname().unwrap_or("unknown".to_string());
+        let cpu = sys
+            .cpus()
+            .first()
+            .map(|cpu| cpu.brand().to_string())
+            .unwrap_or_else(|| "Unknown CPU".to_string());
+        let memory = format!("{:.2} GB", sys.total_memory() as f64 / (1024.0 * 1024.0));
+        let user = whoami::username();
+
+        SystemInfo {
+            os,
+            kernel,
+            uptime,
+            hostname,
+            cpu,
+            memory,
+            user,
+        }
+    }
 }
 
 /// Perform a single chat reply
@@ -75,7 +118,9 @@ async fn main() -> Result<(), ollama_rs::error::OllamaError> {
     // now we can start the coordinator
     let ollama = Ollama::default();
     let tools = get_functions();
-    let history: Vec<ChatMessage> = vec![];
+    let history: Vec<ChatMessage> = vec![ChatMessage::system(
+        serde_json::to_string(&SystemInfo::new()).unwrap()
+    )];
     let mut coordinator = Coordinator::new_with_tools(ollama, String::from(args.model), history, tools)
         .options(GenerationOptions::default()
         .num_ctx(64000))

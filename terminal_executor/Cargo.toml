@@ -13,3 +13,6 @@ tokio-stream = "0.1.17"
 ollama_rs_tool_macro = {"path"="../ollama_rs_tool_macro", "version"="0.1.0"}
 termimad = "0.31.2"
 clap = { version = "4.5.29", features = ["derive"] }
+sysinfo = "0.30"
+uname = "0.1"
+whoami = "1.4"
