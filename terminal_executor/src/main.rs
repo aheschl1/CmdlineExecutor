@@ -1,4 +1,8 @@
 use std::env;
+use clap::command;
+use ollama_rs::generation::tools::Tool;
+use ollama_rs::generation::tools::ToolGroup;
+use ollama_rs::history::ChatHistory;
 use ollama_rs_tool_macro::generate_ollamars_cmdline_tool_functions;
 use ollama_rs::coordinator::Coordinator;
 use ollama_rs::generation::chat::ChatMessage;
@@ -13,33 +17,38 @@ use std::time::Duration;
 use std::process::Stdio;
 use std::io::BufReader;
 use std::io::BufRead;
+use clap::{Parser};
 
+const DEFAULT_MODEL: &str = "cmdline_executor_llama3b:latest";
+// building the tool calls
 generate_ollamars_cmdline_tool_functions!("/home/andrew/Documents/CmdlineLLMWorkspace/CmdlineExecutor/terminal_executor/tools/tools.json");
 
-fn get_model_name() -> String{
-    match env::var("CMDLINE_LLM_MODEL") {
-        Ok(val) => val,
-        Err(_) => "cmdline_executor_llama3b:latest".to_string(),
-    }
+#[derive(Parser, Debug)]
+#[command(name = "terminalExecutor", about = "A command-line tool for llm interaction with linux machine")]
+struct Args {
+    /// Single chat message (optional)
+    #[arg(short = 's', long = "single_chat")]
+    single_chat: Option<String>,
+    /// Debug mode (optional flag)
+    #[arg(short = 'd', long = "debug")]
+    debug: bool,
+    /// Model selection (optional)
+    #[arg(short = 'm', long = "model", default_value = DEFAULT_MODEL)]
+    model: String,
 }
 
-#[tokio::main]
-async fn main() -> Result<(), ollama_rs::error::OllamaError> {
-    let model = get_model_name();
-    let ollama = Ollama::default();
+/// Perform a single chat reply
+async fn do_single_chat_reply<T: ChatHistory, V: ToolGroup>(single_chat: String, coordinator: &mut Coordinator<T, V>) -> Result<(), ollama_rs::error::OllamaError> {
+    let resp = coordinator
+        .chat(vec![ChatMessage::user(single_chat)])
+        .await?;
+    println!("{}", &resp.message.content);
+    Ok(())
+}
 
-
-    let tools = get_functions();
-    let history: Vec<ChatMessage> = vec![];
-    let mut coordinator = Coordinator::new_with_tools(ollama, model, history, tools)
-        .options(GenerationOptions::default().num_ctx(64000)).debug(true);
-
-    
-    // start with the default skin
-    let mut skin = MadSkin::default();
-    // let's decide bold is in light gray
-    skin.bold.set_fg(gray(20));
-    // collect inputs and send
+/// Perform chat mode
+/// This function will loop until the user types "exit"
+async fn do_chat_mode<T: ChatHistory, V: ToolGroup>(coordinator: &mut Coordinator<T, V>, skin: &MadSkin) -> Result<(), ollama_rs::error::OllamaError> {
     while let Some(line) = BufReader::new(std::io::stdin()).lines().next() {
         let line = line.unwrap();
         if line == "exit" {
@@ -49,8 +58,39 @@ async fn main() -> Result<(), ollama_rs::error::OllamaError> {
             .chat(vec![ChatMessage::user(line)])
             .await?;
         
-        eprintln!("{}", skin.term_text("---"));
-        eprintln!("{}", skin.term_text(&resp.message.content));
+        skinned_output("---", skin).await;
+        skinned_output(&resp.message.content, skin).await;
     }
+    Ok(())
+}
+
+/// Output a message with a light gray bold font
+async fn skinned_output(message: &str, skin: &MadSkin) {
+    eprintln!("{}", skin.term_text(message));
+}
+
+#[tokio::main]
+async fn main() -> Result<(), ollama_rs::error::OllamaError> {
+    let args = Args::parse();
+    // now we can start the coordinator
+    let ollama = Ollama::default();
+    let tools = get_functions();
+    let history: Vec<ChatMessage> = vec![];
+    let mut coordinator = Coordinator::new_with_tools(ollama, String::from(args.model), history, tools)
+        .options(GenerationOptions::default()
+        .num_ctx(64000))
+        .debug(args.debug);
+
+    // setup skin
+    let mut skin = MadSkin::default();
+    skin.bold.set_fg(gray(20));
+
+    if let Some(single_chat) = args.single_chat {
+        do_single_chat_reply(single_chat, &mut coordinator).await?;
+        return Ok(());
+    }
+    // otherwise, we are in chat mode
+    do_chat_mode(&mut coordinator, &skin).await?;
+    
     Ok(())
 }
