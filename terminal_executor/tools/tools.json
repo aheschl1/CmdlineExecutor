@@ -1,67 +1,5 @@
 [
     {
-        "name": "classegTrain",
-        "description": "Train a model using classeg pipeline. if you do not want use an option, set it to the empty string",
-        "params": [
-            {
-                "name": "d",
-                "description": "dataset id",
-                "required": true,
-                "flag": false,
-                "positional": false,
-                "prefix": "-"
-            },
-            {
-                "name": "f",
-                "description": "fold to use",
-                "required": true,
-                "flag": false,
-                "positional": false,
-                "prefix": "-"
-            },
-            {
-                "name": "n",
-                "description": "name of the experiment",
-                "required": false,
-                "flag": false,
-                "positional": false,
-                "prefix": "-"
-            },
-            {
-                "name": "c",
-                "description": "configuration file name",
-                "required": false,
-                "flag": false,
-                "positional": false,
-                "prefix": "-"
-            },
-            {
-                "name": "ext",
-                "description": "extension to use for training",
-                "required": false,
-                "flag": false,
-                "positional": false,
-                "prefix": "-"
-            },
-            {
-                "name": "fo",
-                "description": "to force an override of the output folder",
-                "required": false,
-                "flag": true,
-                "positional": false,
-                "prefix": "--"
-            },
-            {
-                "name": "r",
-                "description": "to resume training",
-                "required": false,
-                "flag": true,
-                "positional": false,
-                "prefix": "--"
-            }
-        ]
-    },
-    {
         "name": "ls",
         "description": "List contents of a folder",
         "params": [
@@ -76,6 +14,14 @@
             {
                 "name": "l",
                 "description": "list in long format",
+                "required": false,
+                "flag": true,
+                "positional": false,
+                "prefix": "-"
+            },
+            {
+                "name": "a",
+                "description": "list all files including hidden files",
                 "required": false,
                 "flag": true,
                 "positional": false,
@@ -168,5 +114,64 @@
                 "prefix": "-"
             }
         ]
-    }   
+    },
+    {
+        "name": "find",
+        "description": "Search for files or directories.",
+        "params": [
+            {
+                "name": "path",
+                "description": "Path to search in",
+                "required": true,
+                "flag": false,
+                "positional": true,
+                "prefix": ""
+            },
+            {
+                "name": "name",
+                "description": "Find by filename pattern",
+                "required": false,
+                "flag": false,
+                "positional": false,
+                "prefix": "-"
+            }
+        ]
+    },
+    {
+        "name": "traceroute",
+        "description": "Trace the network route to a destination.",
+        "params": [
+            {
+                "name": "host",
+                "description": "Destination host or IP address",
+                "required": true,
+                "flag": false,
+                "positional": true,
+                "prefix": ""
+            }
+        ]
+    },
+    {
+        "name": "ping",
+        "description": "Check network connectivity to a host.",
+        "params": [
+            {
+                "name": "host",
+                "description": "Host or IP address to ping",
+                "required": true,
+                "flag": false,
+                "positional": true,
+                "prefix": ""
+            },
+            {
+                "name": "c",
+                "description": "Number of packets to send",
+                "required": false,
+                "flag": false,
+                "positional": false,
+                "prefix": "-"
+            }
+        ]
+    }
+    
 ]
