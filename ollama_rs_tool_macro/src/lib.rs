@@ -118,6 +118,8 @@ pub fn generate_ollamars_cmdline_tool_functions(input: TokenStream) -> TokenStre
                 .arg("-c")
                 .arg(format!("{}; exec bash", command_to_run)) // Ensure command keeps shell open
                 .status();
+
+            println!("Running: {}", command_to_run);
     
             match status {
                 Ok(_) => {        
@@ -138,13 +140,13 @@ pub fn generate_ollamars_cmdline_tool_functions(input: TokenStream) -> TokenStre
                             let reader = BufReader::new(stdout);
         
                             let start_time = Instant::now();
-                            let timeout = Duration::new(15, 0); // 8 seconds
+                            let timeout = Duration::new(25, 0); // 8 seconds
                             let mut output = String::new();
                             let mut did_timeout = false;
         
                             for line in reader.lines() {
                                 if let Err(_) = line {
-                                    output.push_str("<system>laucnh success, but failed to read line from stdout. </system>\n");
+                                    output.push_str("<system>launch success, but failed to read line from stdout. </system>\n");
                                 } else {
                                     let line = line.unwrap();
                                     output.push_str(&line);

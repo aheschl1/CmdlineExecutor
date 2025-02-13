@@ -1,11 +1,11 @@
 [
     {
         "name": "ls",
-        "description": "List contents of a folder",
+        "description": "List the contents of a folder",
         "params": [
             {
                 "name": "folder",
-                "description": "path to folder to list",
+                "description": "path to the folder to list",
                 "required": true,
                 "flag": false,
                 "positional": true,
@@ -13,7 +13,7 @@
             },
             {
                 "name": "l",
-                "description": "list in long format",
+                "description": "list in long format, with more details",
                 "required": false,
                 "flag": true,
                 "positional": false,
@@ -35,7 +35,7 @@
         "params": [
             {
                 "name": "file",
-                "description": "Path to the file",
+                "description": "Path to the file to look at",
                 "required": true,
                 "flag": false,
                 "positional": true,
@@ -45,8 +45,16 @@
     },
     {
         "name": "df",
-        "description": "Display disk space usage for file systems.",
+        "description": "Display disk space usage in the file system.",
         "params": [
+            {
+                "name": "path",
+                "description": "Path to directory or file which resides on the disk you want to check",
+                "required": false,
+                "flag": false,
+                "positional": true,
+                "prefix": ""
+            },
             {
                 "name": "h",
                 "description": "Display sizes in human-readable format",
@@ -63,7 +71,7 @@
         "params": [
             {
                 "name": "path",
-                "description": "Path to directory or file",
+                "description": "Path to directory or file which resides on the disk you want to check",
                 "required": false,
                 "flag": false,
                 "positional": true,
@@ -134,6 +142,30 @@
                 "flag": false,
                 "positional": false,
                 "prefix": "-"
+            },
+            {
+                "name": "size",
+                "description": "Find files by size (e.g., +100M for >100MB, -10k for <10KB)",
+                "required": false,
+                "flag": false,
+                "positional": false,
+                "prefix": "-"
+            },
+            {
+                "name": "mtime",
+                "description": "Find files modified N days ago (-N for within N days, +N for older than N days)",
+                "required": false,
+                "flag": false,
+                "positional": false,
+                "prefix": "-"
+            },
+            {
+                "name": "perm",
+                "description": "Find files by permissions (e.g., 777 for full access, -o+w for others-writable)",
+                "required": false,
+                "flag": false,
+                "positional": false,
+                "prefix": "-"
             }
         ]
     },
@@ -143,7 +175,7 @@
         "params": [
             {
                 "name": "host",
-                "description": "Destination host or IP address",
+                "description": "Destination host or IP address to trace",
                 "required": true,
                 "flag": false,
                 "positional": true,
