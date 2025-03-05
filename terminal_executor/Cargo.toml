@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ollama-rs = {version="0.2.5", path="../../ollama-rs/ollama-rs", features=["stream", "macros", "tool-implementations"]}
+ollama-rs = {version="0.2.5", features=["stream", "macros", "tool-implementations"]}
 schemars = "0.8.21"
 serde = "1.0.217"
 serde_json = "1.0.138"

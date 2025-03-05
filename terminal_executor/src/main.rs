@@ -99,7 +99,7 @@ async fn main() -> Result<(), ollama_rs::error::OllamaError> {
     let history: Vec<ChatMessage> = vec![ChatMessage::system(serde_json::to_string(&utils::SystemInfo::new()).unwrap())];
     let mut coordinator = Coordinator::new_with_tools(ollama, String::from(args.model), history, tools::get_functions())
         .options(GenerationOptions::default()
-        .num_ctx(args.context))
+        .num_ctx(args.context as u64))
         .debug(args.debug);
 
     // setup skin
