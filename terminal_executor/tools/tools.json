@@ -124,52 +124,6 @@
         ]
     },
     {
-        "name": "find",
-        "description": "Search for files or directories.",
-        "params": [
-            {
-                "name": "path",
-                "description": "Path to search in",
-                "required": true,
-                "flag": false,
-                "positional": true,
-                "prefix": ""
-            },
-            {
-                "name": "name",
-                "description": "Find by filename pattern",
-                "required": false,
-                "flag": false,
-                "positional": false,
-                "prefix": "-"
-            },
-            {
-                "name": "size",
-                "description": "Find files by size (e.g., +100M for >100MB, -10k for <10KB)",
-                "required": false,
-                "flag": false,
-                "positional": false,
-                "prefix": "-"
-            },
-            {
-                "name": "mtime",
-                "description": "Find files modified N days ago (-N for within N days, +N for older than N days)",
-                "required": false,
-                "flag": false,
-                "positional": false,
-                "prefix": "-"
-            },
-            {
-                "name": "perm",
-                "description": "Find files by permissions (e.g., 777 for full access, -o+w for others-writable)",
-                "required": false,
-                "flag": false,
-                "positional": false,
-                "prefix": "-"
-            }
-        ]
-    },
-    {
         "name": "traceroute",
         "description": "Trace the network route to a destination.",
         "params": [

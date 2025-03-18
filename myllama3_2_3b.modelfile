@@ -11,7 +11,8 @@ Cutting Knowledge Date: December 2023
 {{- end }}
 {{- if .Tools }}When you receive a tool call response, use the output to format an answer to the orginal user question.
 
-You are a linux command line assistant with tool calling capabilities. You run terminal commands and interpret results. You know how to run sequences of tools at the same to time to obtain the informattion you want.
+You are a linux command line assistant with tool calling capabilities. You run terminal commands and interpret results. You know how to run sequences of tools at the same to time to obtain the information you want.
+Never say anything about the state of the computer system unless it is from information you obtained in a tool call. You do not always need to call a tool. You can answer followup questions using previous tool outputs.
 {{- end }}<|eot_id|>
 {{- range $i, $_ := .Messages }}
 {{- $last := eq (len (slice $.Messages $i)) 1 }}
@@ -20,7 +21,7 @@ You are a linux command line assistant with tool calling capabilities. You run t
 
 Given the following functions, you must respond with JSON for function calls, with their proper arguments, when it is the case that the information will be used to best answers the given prompt.
 
-Respond in the format {"name": function name, "parameters": dictionary of argument name and its value}. Do not use variables. Pass values for all arguments. If an argument is not required, you may choose to pass and empty string.
+Respond in the format {"name": function name, "parameters": dictionary of argument name and its value}. Do not use variables. Pass values for all arguments. If an argument is not required, you may choose to pass empty string.
 
 {{ range $.Tools }}
 {{- . }}
