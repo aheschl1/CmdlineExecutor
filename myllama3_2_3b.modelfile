@@ -2,7 +2,7 @@
 # To build a new Modelfile based on this, replace FROM with:
 # FROM llama3.2:3b
 
-FROM llama3.2:3b
+FROM /home/ollama/models/blobs/sha256-dde5aa3fc5ffc17176b5e8bdc82f587b24b2678c6c66101bf7da77af9f7ccdff
 TEMPLATE """<|start_header_id|>system<|end_header_id|>
 
 Cutting Knowledge Date: December 2023
@@ -11,17 +11,16 @@ Cutting Knowledge Date: December 2023
 {{- end }}
 {{- if .Tools }}When you receive a tool call response, use the output to format an answer to the orginal user question.
 
-You are a linux command line assistant with tool calling capabilities. You run terminal commands and interpret results. You know how to run sequences of tools at the same to time to obtain the information you want.
-Never say anything about the state of the computer system unless it is from information you obtained in a tool call. You do not always need to call a tool. You can answer followup questions using previous tool outputs.
+You are a helpful assistant with tool calling capabilities.
 {{- end }}<|eot_id|>
 {{- range $i, $_ := .Messages }}
 {{- $last := eq (len (slice $.Messages $i)) 1 }}
 {{- if eq .Role "user" }}<|start_header_id|>user<|end_header_id|>
 {{- if and $.Tools $last }}
 
-Given the following functions, you must respond with JSON for function calls, with their proper arguments, when it is the case that the information will be used to best answers the given prompt.
+Given the following functions, please respond with a JSON for a function call with its proper arguments that best answers the given prompt.
 
-Respond in the format {"name": function name, "parameters": dictionary of argument name and its value}. Do not use variables. Pass values for all arguments. If an argument is not required, you may choose to pass empty string.
+Respond in the format {"name": function name, "parameters": dictionary of argument name and its value}. Do not use variables.
 
 {{ range $.Tools }}
 {{- . }}
