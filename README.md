@@ -46,7 +46,3 @@ To get full options use the following command:
 ```shell
 terminalExecutor --help
 ```
-
-# Adding a tool
-
-To add a tool, you must modify the tools.json file in the terminal_executor directory.
