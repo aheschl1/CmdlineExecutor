@@ -16,7 +16,7 @@ use clap::Parser;
 mod utils;
 mod tools;
 
-const DEFAULT_MODEL: &str = "gemma_commandline_exec:latest";
+const DEFAULT_MODEL: &str = "gemma12b_commandline_exec:latest";
 const DEFAULT_CONTEXT: u32 = 16000;
 
 /// Perform a single chat reply
@@ -60,7 +60,9 @@ async fn do_chat_mode<T: ChatHistory, V: ToolGroup>(
             .chat(vec![ChatMessage::user(line)])
             .await;
         if let Err(e) = resp {
-            eprintln!("Error: {}", e);
+            Err(e)?;
+            print!("You: ");
+            std::io::stdout().flush().unwrap();
             continue;
         }
         skinned_output("---", skin).await;
