@@ -3,6 +3,7 @@ use quote::quote;
 use serde::Deserialize;
 use std::fs;
 use syn::{parse_macro_input, LitStr};
+use std::env;
 
 #[derive(Deserialize)]
 struct CmdlineCommand{
@@ -21,12 +22,14 @@ struct CmdlineParam{
     prefix: String
 }
 
+/// Generate a set of functions from a JSON file that can be used to execute commands in a tmux session
 #[proc_macro]
-pub fn generate_ollamars_cmdline_tool_functions(input: TokenStream) -> TokenStream {
+pub fn generate_ollamars_cmdline_tool_functions(_input: TokenStream) -> TokenStream {
     // Read and parse the JSON file
-    let file_path = parse_macro_input!(input as LitStr).value();
-
-    let json_content = fs::read_to_string(file_path).expect("Failed to read config.json");
+    // let file_path = parse_macro_input!(input as LitStr).value();
+    let use_name = env::var("USER").unwrap_or("failure".to_string());
+    let file_path = env::var("TERMINAL_EXECUTOR_TOOLS").unwrap_or(format!("/home/{use_name}/terminal_executor_tools.json"));
+    let json_content = fs::read_to_string(&file_path).expect(format!("Failed to read {file_path}").as_str());
     let commands: Vec<CmdlineCommand> = serde_json::from_str(&json_content).expect("Invalid JSON format");
 
     // Generate function definitions

@@ -8,4 +8,4 @@ use std::io::BufRead;
 
 // This macro expands to numerous structs and functions which are defined in the json file
 // This macro also exposes get_functions() which returns the ollama-rs ToolGroup
-generate_ollamars_cmdline_tool_functions!("/home/andrewheschl/Documents/CmdlineExecutor/terminal_executor/tools/tools.json");
+generate_ollamars_cmdline_tool_functions!();

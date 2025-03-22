@@ -16,8 +16,8 @@ use clap::Parser;
 mod utils;
 mod tools;
 
-const DEFAULT_MODEL: &str = "cmdline_executor_llama3b:latest";
-const DEFAULT_CONTEXT: u32 = 64000;
+const DEFAULT_MODEL: &str = "gemma_commandline_exec:latest";
+const DEFAULT_CONTEXT: u32 = 16000;
 
 /// Perform a single chat reply
 /// This function will chat with the model once and print the response
@@ -59,17 +59,12 @@ async fn do_chat_mode<T: ChatHistory, V: ToolGroup>(
         let resp = coordinator
             .chat(vec![ChatMessage::user(line)])
             .await;
-
         if let Err(e) = resp {
-            eprintln!("Error: {}", e.to_string());
-            print!("You: ");
-            std::io::stdout().flush().unwrap();
+            eprintln!("Error: {}", e);
             continue;
         }
-        
-        let resp = resp.unwrap();
         skinned_output("---", skin).await;
-        skinned_output(&resp.message.content, skin).await;
+        skinned_output(&resp.unwrap().message.content, skin).await;
         print!("You: ");
         std::io::stdout().flush().unwrap();
     }
@@ -105,7 +100,9 @@ async fn main() -> Result<(), ollama_rs::error::OllamaError> {
     // now we can start the coordinator
     let ollama = Ollama::default();
     println!("Using model: {}", args.model);
-    let history: Vec<ChatMessage> = vec![ChatMessage::system(serde_json::to_string(&utils::SystemInfo::new()).unwrap())];
+    let history: Vec<ChatMessage> = vec![
+        ChatMessage::system(serde_json::to_string(&utils::SystemInfo::new()).unwrap())
+    ];
     let mut coordinator = Coordinator::new_with_tools(ollama, String::from(args.model), history, tools::get_functions())
         .options(GenerationOptions::default()
         .temperature(0.0)
