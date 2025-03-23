@@ -8,11 +8,12 @@ use termimad::gray;
 use termimad::MadSkin;
 use tokio;
 use ollama_rs::Ollama;
+use std::env;
 use std::io::BufReader;
 use std::io::BufRead;
 use std::io::Write;
 use clap::Parser;
-
+use url::Url;
 mod utils;
 mod tools;
 
@@ -96,11 +97,19 @@ struct Args {
     context: u32,
 }
 
+fn get_ollama_url() -> String {
+    let host = env::var("OLLAMA_HOST").unwrap_or("127.0.0.1".to_string());
+    let port: u32 = host.split(":").collect::<Vec<&str>>().pop().unwrap().parse().unwrap_or(11434);
+    let url = format!("http://{}:{}", host, port);
+    return url;
+}
+
 #[tokio::main]
 async fn main() -> Result<(), ollama_rs::error::OllamaError> {
     let args = Args::parse();
     // now we can start the coordinator
-    let ollama = Ollama::default();
+    let url = Url::parse(get_ollama_url().as_str()).unwrap();
+    let ollama = Ollama::from_url(url);
     println!("Using model: {}", args.model);
     let history: Vec<ChatMessage> = vec![
         ChatMessage::system(serde_json::to_string(&utils::SystemInfo::new()).unwrap())
