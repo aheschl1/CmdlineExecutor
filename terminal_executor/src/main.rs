@@ -60,7 +60,7 @@ async fn do_chat_mode<T: ChatHistory, V: ToolGroup>(
             .chat(vec![ChatMessage::user(line)])
             .await;
         if let Err(e) = resp {
-            Err(e)?;
+            println!("Error: {:?}", e);
             print!("You: ");
             std::io::stdout().flush().unwrap();
             continue;
