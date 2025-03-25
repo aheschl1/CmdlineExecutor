@@ -51,7 +51,12 @@ pub fn generate_ollamars_cmdline_tool_functions(_input: TokenStream) -> TokenStr
             // } else {
             //     quote! { Option<String> }
             // };
-            let arg_type = quote! { String };
+            // let arg_type = quote! { String };
+            let arg_type = if param.flag {
+                quote! { bool }
+            } else {
+                quote! { String }
+            };
             quote! { #arg_name: #arg_type }
         });
         let arg_name_strs = cmd.params.iter().map(|param| {
@@ -99,6 +104,7 @@ pub fn generate_ollamars_cmdline_tool_functions(_input: TokenStream) -> TokenStr
                 let arg_name = args_names[i];
                 let arg_type = arg_types[i];
                 let arg_prefix = arg_prefixes[i];
+                if arg_type == "flag" && (String::from(a)=="false"){continue;}
                 if a.len() == 0 {continue;}
                 else{
                     if arg_type == "flag"{
