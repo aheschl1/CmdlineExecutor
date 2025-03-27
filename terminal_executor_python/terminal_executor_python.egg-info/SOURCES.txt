@@ -1,0 +1,12 @@
+setup.py
+terminal_executor/__init__.py
+terminal_executor/agent.py
+terminal_executor/main.py
+terminal_executor/spinner.py
+terminal_executor/state.py
+terminal_executor/tools.py
+terminal_executor_python.egg-info/PKG-INFO
+terminal_executor_python.egg-info/SOURCES.txt
+terminal_executor_python.egg-info/dependency_links.txt
+terminal_executor_python.egg-info/entry_points.txt
+terminal_executor_python.egg-info/top_level.txt

@@ -50,7 +50,7 @@
             {
                 "name": "path",
                 "description": "Path to directory or file which resides on the disk you want to check",
-                "required": false,
+                "required": true,
                 "flag": false,
                 "positional": true,
                 "prefix": ""
@@ -58,7 +58,7 @@
             {
                 "name": "h",
                 "description": "Display sizes in human-readable format",
-                "required": false,
+                "required": true,
                 "flag": true,
                 "positional": false,
                 "prefix": "-"
@@ -72,7 +72,7 @@
             {
                 "name": "path",
                 "description": "Path to directory or file which resides on the disk you want to check",
-                "required": false,
+                "required": true,
                 "flag": false,
                 "positional": true,
                 "prefix": ""
@@ -80,7 +80,7 @@
             {
                 "name": "h",
                 "description": "Display sizes in human-readable format",
-                "required": false,
+                "required": true,
                 "flag": true,
                 "positional": false,
                 "prefix": "-"
@@ -88,7 +88,7 @@
             {
                 "name": "s",
                 "description": "Summarize total size",
-                "required": false,
+                "required": true,
                 "flag": true,
                 "positional": false,
                 "prefix": "-"
@@ -102,7 +102,7 @@
             {
                 "name": "a",
                 "description": "Show all processes with detailed info",
-                "required": false,
+                "required": true,
                 "flag": true,
                 "positional": false,
                 "prefix": "-"
@@ -116,7 +116,7 @@
             {
                 "name": "h",
                 "description": "Display values in human-readable format",
-                "required": false,
+                "required": true,
                 "flag": true,
                 "positional": false,
                 "prefix": "-"
@@ -152,7 +152,7 @@
             {
                 "name": "c",
                 "description": "Number of packets to send",
-                "required": false,
+                "required": true,
                 "flag": false,
                 "positional": false,
                 "prefix": "-"

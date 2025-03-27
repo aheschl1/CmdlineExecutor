@@ -9,6 +9,7 @@ RULES:
 2. If needed, run multiple commands one after the other to get information. You do not need to ask the user for permission.
     2.1 For example, you may look at the output of ls on the home dir, then run ls on the home/Document dir, without asking the user.
     2.2 Another example is running multiple ls commands to identify files, then running cat when you have found the file.
+3. If you do not need to use an argument, pass false if it is a flag, and an empty string otherwise.
 """
 TEMPLATE """{{- if .System }}<start_of_turn>user
 {{ .System }}
