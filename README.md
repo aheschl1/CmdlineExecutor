@@ -49,7 +49,7 @@ terminalExecutor --help
 
 # Example of Rust Version
 
-```shell
+```
 (/CmdlineExecutor/terminal_executor) $ terminalExecutor -m PetrosStav/gemma3-tools:12b -c 16000 # or cargo run -- -m PetrosStav/gemma3-tools:12b -c 16000
 
 Using model: PetrosStav/gemma3-tools:12b
